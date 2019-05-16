@@ -16,9 +16,9 @@ uzytkownik_id BIGINT NOT NULL
 
 
 
-INSERT INTO Uzytkownik(login,imie,nazwisko,haslo) VALUES('Login1','Jan','Kowalski','password')
-INSERT INTO Uzytkownik(login,imie,nazwisko,haslo) VALUES('Login2','Tomasz','Krab','password')
-INSERT INTO Uzytkownik(login,imie,nazwisko,haslo) VALUES('Login3','Łukasz','Nowak','password')
+INSERT INTO Uzytkownik(login,imie,nazwisko,haslo) VALUES('Login1','Jan','Kowalski','5F4DCC3B5AA765D61D8327DEB882CF99')
+INSERT INTO Uzytkownik(login,imie,nazwisko,haslo) VALUES('Login2','Tomasz','Krab','5F4DCC3B5AA765D61D8327DEB882CF99')
+INSERT INTO Uzytkownik(login,imie,nazwisko,haslo) VALUES('Login3','Łukasz','Nowak','5F4DCC3B5AA765D61D8327DEB882CF99')
 
 INSERT INTO Urlop(dataod,datado,uzytkownik_id) VALUES('2019-05-20','2019-05-26','1')
 INSERT INTO Urlop(dataod,datado,uzytkownik_id) VALUES('2019-05-27','2019-06-02','2')

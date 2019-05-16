@@ -19,7 +19,7 @@ namespace FreeT.Repositories
             {
                 try
                 {
-                SqlCommand command = new SqlCommand(@"INSERT INTO Urlopy (Data_Od, Data_Do, Uzytkownik_Id) VALUES (@data_od, @data_do, @uzytkownik_id)", connection);
+                SqlCommand command = new SqlCommand(@"INSERT INTO Urlop (DataOd, DataDo, Uzytkownik_Id) VALUES (@data_od, @data_do, @uzytkownik_id)", connection);
                 command.CommandType = System.Data.CommandType.Text;
                 command.Parameters.Add("data_od", SqlDbType.DateTime);
                 command.Parameters["data_od"].Value = dto.Data_Od;
@@ -48,7 +48,7 @@ namespace FreeT.Repositories
             using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
 
-                SqlCommand command = new SqlCommand(@"SELECT ID, Data_Od, Data_Do, Uzytkownik_Id FROM Urlopy WHERE Uzytkownik_Id = @Uzytkownik_Id", connection);
+                SqlCommand command = new SqlCommand(@"SELECT DataOd, DataDo, Uzytkownik_Id FROM Urlop WHERE Uzytkownik_Id = @Uzytkownik_Id", connection);
                 command.CommandType = System.Data.CommandType.Text;
                 command.Parameters.Add("Data_Od", SqlDbType.DateTime);
                 command.Parameters["Data_Od"].Value = dto.Data_Od;
@@ -60,7 +60,6 @@ namespace FreeT.Repositories
                 var reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                dto.Id = reader.GetInt64(0);
                 dto.Data_Od = reader.GetDateTime(1);
                 dto.Data_Do = reader.GetDateTime(2);
                 dto.Uzytkownik_Id = reader.GetInt64(3);
@@ -81,14 +80,13 @@ namespace FreeT.Repositories
             using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
 
-                SqlCommand command = new SqlCommand("SELECT ID, Data_Od, Data_Do, Uzytkownik_Id FROM Urlopy", connection);
+                SqlCommand command = new SqlCommand("SELECT DataOd, DataDo, Uzytkownik_Id FROM Urlop", connection);
                 command.CommandType = System.Data.CommandType.Text;
                 connection.Open();
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     UrlopDTO dto = new UrlopDTO();
-                    dto.Id = reader.GetInt64(0);
                     dto.Data_Od = reader.GetDateTime(1);
                     dto.Data_Do = reader.GetDateTime(2);
                     dto.Uzytkownik_Id = reader.GetInt64(3);

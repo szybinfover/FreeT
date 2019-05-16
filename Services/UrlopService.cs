@@ -22,9 +22,9 @@ namespace FreeT.Services
             return urlopyRepository.Create(dto);
         }
 
-        public UrlopDTO Get(long id)
+        public UrlopDTO Get(long Uzytkownik_Id)
         {
-           return urlopyRepository.Get(id); 
+           return urlopyRepository.Get(Uzytkownik_Id); 
         }
 
         public IList<UrlopDTO> GetAll()

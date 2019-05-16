@@ -7,7 +7,7 @@ namespace FreeT.Repositories
     public interface IUrlopRepository
     {
         IList<UrlopDTO> GetAll();
-       UrlopDTO Get(Int64 id);
+       UrlopDTO Get(Int64 Uzytkownik_Id);
        bool Create(UrlopAddDTO dto);
     }
 }
