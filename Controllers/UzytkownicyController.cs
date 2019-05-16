@@ -28,5 +28,49 @@ namespace Freet.Controllers
         {
             return uzytkownicyService.GetAll().ToList();
         }
+
+        [HttpPost]
+        public IActionResult Login([FromBody] UzytkownikLogin dto)
+        {
+            bool okFlag = false;
+            string valLogin = dto.Login;
+            string valHaslo = dto.Haslo;
+
+            string loginInfo = "";
+            string hasloInfo = "";
+
+            if (valLogin.Length > 0 && valLogin.Length <=50)
+            {
+                okFlag = true;
+            }
+            else
+            {
+                okFlag = false;
+                loginInfo = "Login niepoprawna ilość znaków. ";
+            }
+            
+            if (valHaslo.Length > 0 && valHaslo.Length <=50)
+            {
+                okFlag = true;
+            }
+            else
+            {
+                okFlag = false;
+                loginInfo = "Haslo niepoprawna ilość znaków. ";
+            }
+
+            if (okFlag)
+            {
+                var result = uzytkownicyService.Login(dto);
+                if (result == null)
+                    return NoContent();
+                else
+                    return Ok(result);
+            }
+            else
+            {
+                return BadRequest(loginInfo+" "+hasloInfo);
+            }
+        }
     }
 }
