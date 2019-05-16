@@ -13,6 +13,8 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using FreeT.Services;
 using FreeT.Repositories;
+using Freet.Repositories;
+using Freet.Services;
 
 namespace Freet
 {
@@ -38,6 +40,8 @@ namespace Freet
 
             services.AddScoped<IUrlopService, UrlopService>();
             services.AddScoped<IUrlopRepository, UrlopRepository>();
+            services.AddScoped<IUzytkownicyService, UzytkownicyService>();
+            services.AddScoped<IUzytkownicyRepository, UzytkownicyRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
