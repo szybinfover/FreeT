@@ -19,16 +19,16 @@ namespace FreeT.Repositories
             {
                 try
                 {
-                SqlCommand command = new SqlCommand(@"INSERT INTO Urlop (DataOd, DataDo, Uzytkownik_Id) VALUES (@data_od, @data_do, @uzytkownik_id)", connection);
-                command.CommandType = System.Data.CommandType.Text;
-                command.Parameters.Add("data_od", SqlDbType.DateTime);
-                command.Parameters["data_od"].Value = dto.Data_Od;
-                command.Parameters.Add("data_do", SqlDbType.DateTime);
-                command.Parameters["data_do"].Value = dto.Data_Do;
-                command.Parameters.Add("uzytkownik_id", SqlDbType.BigInt);
-                command.Parameters["uzytkownik_id"].Value = dto.Uzytkownik_Id;
-                connection.Open();
-                var result = command.ExecuteNonQuery();
+                    SqlCommand command = new SqlCommand(@"INSERT INTO Urlop (DataOd, DataDo, Uzytkownik_Id) VALUES (@data_od, @data_do, @uzytkownik_Id)", connection);
+                    command.CommandType = System.Data.CommandType.Text;
+                    command.Parameters.Add("data_od", SqlDbType.DateTime);
+                    command.Parameters["data_od"].Value = dto.Data_Od;
+                    command.Parameters.Add("data_do", SqlDbType.DateTime);
+                    command.Parameters["data_do"].Value = dto.Data_Do;
+                    command.Parameters.Add("uzytkownik_id", SqlDbType.BigInt);
+                    command.Parameters["uzytkownik_id"].Value = dto.Uzytkownik_Id;
+                    connection.Open();
+                    var result = command.ExecuteNonQuery();
                 }
                 catch
                 {
@@ -38,63 +38,59 @@ namespace FreeT.Repositories
                 {
                     connection.Close();
                 }
-            }
-            return true;
+                }
+                    return true;
         }
 
-        public UrlopDTO Get(long id)
+        public UrlopDTO Get(long Uzytkownik_Id)
         {
-            UrlopDTO dto = new UrlopDTO();
-            using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
-            {
+        UrlopDTO dto = new UrlopDTO();
+        using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+        {
 
-                SqlCommand command = new SqlCommand(@"SELECT DataOd, DataDo, Uzytkownik_Id FROM Urlop WHERE Uzytkownik_Id = @Uzytkownik_Id", connection);
-                command.CommandType = System.Data.CommandType.Text;
-                command.Parameters.Add("Data_Od", SqlDbType.DateTime);
-                command.Parameters["Data_Od"].Value = dto.Data_Od;
-                command.Parameters.Add("Data_Do", SqlDbType.DateTime);
-                command.Parameters["Data_Do"].Value = dto.Data_Do;
-                command.Parameters.Add("Uzytkownik_Id", SqlDbType.BigInt);
-                command.Parameters["Uzytkownik_Id"].Value = dto.Uzytkownik_Id;
-                connection.Open();
-                var reader = command.ExecuteReader();
-                if (reader.Read())
-                {
-                dto.Data_Od = reader.GetDateTime(1);
-                dto.Data_Do = reader.GetDateTime(2);
-                dto.Uzytkownik_Id = reader.GetInt64(3);
+            SqlCommand command = new SqlCommand(@"SELECT U.DataOd, U.DataDo, U.Uzytkownik_Id FROM Urlop U WHERE Uzytkownik_Id = @Uzytkownik_Id", connection);
+            command.CommandType = System.Data.CommandType.Text;
+            command.Parameters.Add("uzytkownik_id", SqlDbType.BigInt);
+            command.Parameters["uzytkownik_id"].Value = Uzytkownik_Id;
+            connection.Open();
+            var reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                dto.Data_Od = reader.GetDateTime(0);
+                dto.Data_Do = reader.GetDateTime(1);
+                dto.Uzytkownik_Id = reader.GetInt64(2);
                 connection.Close();
-                }
-                else
-                {
+            }
+            else
+            {
                 connection.Close();
                 return null;
-                }
             }
-            return dto;
-        }
+            }
+                return dto;
+            }
 
         public IList<UrlopDTO> GetAll()
         {
             List<UrlopDTO> list = new List<UrlopDTO>();
-            using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
-            {
+        using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+        {
 
-                SqlCommand command = new SqlCommand("SELECT DataOd, DataDo, Uzytkownik_Id FROM Urlop", connection);
-                command.CommandType = System.Data.CommandType.Text;
-                connection.Open();
-                var reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    UrlopDTO dto = new UrlopDTO();
-                    dto.Data_Od = reader.GetDateTime(1);
-                    dto.Data_Do = reader.GetDateTime(2);
-                    dto.Uzytkownik_Id = reader.GetInt64(3);
-                    list.Add(dto);
-                }
-                connection.Close();
+            SqlCommand command = new SqlCommand(@"SELECT U.Id, U.DataOd, U.DataDo, U.Uzytkownik_Id FROM Urlop U", connection);
+            command.CommandType = System.Data.CommandType.Text;
+            connection.Open();
+            var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+            UrlopDTO dto = new UrlopDTO();
+            dto.Data_Od = reader.GetDateTime(1);
+            dto.Data_Do = reader.GetDateTime(2);
+            dto.Uzytkownik_Id = reader.GetInt64(3);
+            list.Add(dto);
             }
-            return list;
+            connection.Close();
+        }
+        return list;
         }
     }
 }

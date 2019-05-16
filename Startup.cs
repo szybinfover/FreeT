@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
+using FreeT.Services;
+using FreeT.Repositories;
 
 namespace Freet
 {
@@ -33,6 +35,9 @@ namespace Freet
             {
                 c.SwaggerDoc("v1", new Info { Title = "Freet API", Version = "v1" });
             });
+
+            services.AddScoped<IUrlopService, UrlopService>();
+            services.AddScoped<IUrlopRepository, UrlopRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
