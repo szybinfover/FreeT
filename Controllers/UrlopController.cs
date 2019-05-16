@@ -45,7 +45,7 @@ namespace FreeT.Controllers
     }
 
     [HttpGet("{Uzytkownik_Id}")]
-    public ActionResult<UrlopDTO> Get(Int64 id)
+    public ActionResult<UrlopDTO> Get(Int64 Uzytkownik_Id)
     {
       UrlopDTO dto = new UrlopDTO();
       using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
@@ -53,19 +53,19 @@ namespace FreeT.Controllers
 
         SqlCommand command = new SqlCommand(@"SELECT U.DataOd, U.DataDo, U.Uzytkownik_Id FROM Urlop U WHERE Uzytkownik_Id = @Uzytkownik_Id", connection);
         command.CommandType = System.Data.CommandType.Text;
-        /* command.Parameters.Add("data_od", SqlDbType.DateTime);
+        /*  command.Parameters.Add("data_od", SqlDbType.DateTime);
         command.Parameters["data_od"].Value = dto.Data_Od;
         command.Parameters.Add("data_do", SqlDbType.DateTime);
         command.Parameters["data_do"].Value = dto.Data_Do;*/
         command.Parameters.Add("uzytkownik_id", SqlDbType.BigInt);
-        command.Parameters["uzytkownik_id"].Value = dto.Uzytkownik_Id;
+        command.Parameters["uzytkownik_id"].Value = Uzytkownik_Id;
         connection.Open();
         var reader = command.ExecuteReader();
         if (reader.Read())
         {
-          dto.Data_Od = reader.GetDateTime(1);
-          dto.Data_Do = reader.GetDateTime(2);
-          dto.Uzytkownik_Id = reader.GetInt64(3);
+          dto.Data_Od = reader.GetDateTime(0);
+          dto.Data_Do = reader.GetDateTime(1);
+          dto.Uzytkownik_Id = reader.GetInt64(2);
           connection.Close();
         }
         else
