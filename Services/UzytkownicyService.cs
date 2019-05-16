@@ -27,7 +27,6 @@ namespace Freet.Services
 
         static string GetMd5Hash(MD5 md5Hash, string input)
         {
-
             // Convert the input string to a byte array and compute the hash.
             byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
 
@@ -45,14 +44,15 @@ namespace Freet.Services
             // Return the hexadecimal string.
             return sBuilder.ToString();
         }
-        public bool Login(UzytkownikLogin dto)
+        public string ConvertToHash(string source)
         {
             using (MD5 md5Hash = MD5.Create())
             {
-                string hash = GetMd5Hash(md5Hash, dto.Haslo);
-                dto.Haslo = hash;
-                Console.WriteLine("Hash: "+ dto.Haslo.ToUpper());
+                return GetMd5Hash(md5Hash, source);
             }
+        }
+        public bool Login(UzytkownikLoginDTO dto)
+        {
             return uzytkownicyRepository.Login(dto);
         }
     }

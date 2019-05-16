@@ -8,6 +8,6 @@ namespace Freet.Repositories
     {
         IList<UzytkownikDTO> GetAll();
 
-        bool Login(UzytkownikLogin dto);
+        bool Login(UzytkownikLoginDTO dto);
     }
 }

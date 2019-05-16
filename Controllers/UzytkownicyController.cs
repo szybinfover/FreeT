@@ -30,8 +30,9 @@ namespace Freet.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login([FromBody] UzytkownikLogin dto)
+        public IActionResult Login([FromBody] UzytkownikLoginDTO dto)
         {
+            dto.Haslo = uzytkownicyService.ConvertToHash(dto.Haslo);
             bool okFlag = false;
             string valLogin = dto.Login;
             string valHaslo = dto.Haslo;

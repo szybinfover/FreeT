@@ -41,12 +41,13 @@ namespace Freet.Repositories
             return list;
         }
 
-        public bool Login (UzytkownikLogin dto)
+        public bool Login (UzytkownikLoginDTO dto)
         {
             using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 try
                 {
+                    bool loginFlag = false;
                     SqlCommand command = new SqlCommand("SELECT LOGIN FROM Uzytkownik WHERE login = @login AND haslo = @haslo", connection);
                     command.CommandType = System.Data.CommandType.Text;
                     command.Parameters.Add("login", SqlDbType.VarChar);
@@ -59,9 +60,13 @@ namespace Freet.Repositories
                     {
                         string Login = "";
                         Login = reader.GetString(0);
-                        Console.WriteLine("User login: "+ Login);
+                        if (dto.Login == Login)
+                        {
+                            Console.WriteLine("User login: "+ Login);
+                            loginFlag = true;
+                        }
                     }
-                    return true;
+                    return loginFlag;
                 }
                 catch
                 {
@@ -72,7 +77,6 @@ namespace Freet.Repositories
                 {
                     connection.Close();
                 }
-                return true;
             }
         }
     }
