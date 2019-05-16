@@ -27,3 +27,6 @@ INSERT INTO Urlop(dataod,datado,uzytkownik_id) VALUES('2019-06-10','2019-06-16',
 
 SELECT * FROM Uzytkownik;
 SELECT * FROM Urlop;
+
+-- Hash MD5 do hasła:password
+--5F4DCC3B5AA765D61D8327DEB882CF99
