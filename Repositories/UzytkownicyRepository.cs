@@ -79,5 +79,39 @@ namespace Freet.Repositories
                 }
             }
         }
+
+        public bool Create (UzytkownikAddDTO dto)
+        {
+            using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                try
+                {
+                    SqlCommand command = new SqlCommand("INSERT INTO Uzytkownik(login,imie,nazwisko,haslo,zespol_id) VALUES(@Login, @Imie, @Nazwisko, @Haslo, @ZespolId)", connection);
+                    command.CommandType = System.Data.CommandType.Text;
+                    command.Parameters.Add("Login", SqlDbType.VarChar);
+                    command.Parameters["Login"].Value = dto.Login;
+                    command.Parameters.Add("Imie", SqlDbType.VarChar);
+                    command.Parameters["Imie"].Value = dto.Imie;
+                    command.Parameters.Add("Nazwisko", SqlDbType.VarChar);
+                    command.Parameters["Nazwisko"].Value = dto.Nazwisko;
+                    command.Parameters.Add("Haslo", SqlDbType.VarChar);
+                    command.Parameters["Haslo"].Value = dto.Haslo;
+                    command.Parameters.Add("ZespolId", SqlDbType.BigInt);
+                    command.Parameters["ZespolId"].Value = dto.ZespolId;
+                    connection.Open();
+                    var result = command.ExecuteNonQuery();
+                    return true;
+                }
+                catch
+                {
+                    connection.Close();
+                    return false;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
     }
 }

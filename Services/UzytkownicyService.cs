@@ -51,9 +51,91 @@ namespace Freet.Services
                 return GetMd5Hash(md5Hash, source);
             }
         }
+        public string CheckNewUserData(UzytkownikAddDTO dto)
+        {
+            dto.Haslo = ConvertToHash(dto.Haslo);
+            bool okFlag = false;
+            string ret = "";
+            string valLogin = dto.Login;
+            string valHaslo = dto.Haslo;
+
+            string valImie = dto.Imie;
+            string valNazwisko = dto.Nazwisko;
+            Int64 valZespolId = dto.ZespolId;
+
+            string loginInfo = "";
+            string hasloInfo = "";
+            string imieInfo = "";
+            string nazwiskoInfo = "";
+            string zespolIdkoInfo = "";
+
+            if (valLogin.Length > 0 && valLogin.Length <=50)
+            {
+                okFlag = true;
+            }
+            else
+            {
+                okFlag = false;
+                loginInfo = "Login niepoprawna ilość znaków. ";
+            }
+            
+            if (valHaslo.Length > 0 && valHaslo.Length <=50)
+            {
+                okFlag = true;
+            }
+            else
+            {
+                okFlag = false;
+                hasloInfo = "Haslo niepoprawna ilość znaków. ";
+            }
+
+            if (valImie.Length > 0 && valImie.Length <=50)
+            {
+                okFlag = true;
+            }
+            else
+            {
+                okFlag = false;
+                imieInfo = "Imie niepoprawna ilość znaków. ";
+            }
+
+            if (valNazwisko.Length > 0 && valNazwisko.Length <=200)
+            {
+                okFlag = true;
+            }
+            else
+            {
+                okFlag = false;
+                nazwiskoInfo = "Nazwisko niepoprawna ilość znaków. ";
+            }
+
+            if (valZespolId > 0)
+            {
+                okFlag = true;
+            }
+            else
+            {
+                okFlag = false;
+                zespolIdkoInfo = "Wartosc idZespol nie moze byc pusta lub rowna zero. ";
+            }
+
+            if(okFlag)
+            {
+                ret = "ok";
+            }
+            else
+            {
+                ret = loginInfo +" "+imieInfo +" "+nazwiskoInfo +" "+hasloInfo +" "+zespolIdkoInfo;
+            }
+            return ret;
+        }
         public bool Login(UzytkownikLoginDTO dto)
         {
             return uzytkownicyRepository.Login(dto);
+        }
+        public bool Create(UzytkownikAddDTO dto)
+        {
+            return uzytkownicyRepository.Create(dto);
         }
     }
 }

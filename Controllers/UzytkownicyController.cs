@@ -29,7 +29,7 @@ namespace Freet.Controllers
             return uzytkownicyService.GetAll().ToList();
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         public IActionResult Login([FromBody] UzytkownikLoginDTO dto)
         {
             dto.Haslo = uzytkownicyService.ConvertToHash(dto.Haslo);
@@ -57,20 +57,35 @@ namespace Freet.Controllers
             else
             {
                 okFlag = false;
-                loginInfo = "Haslo niepoprawna ilość znaków. ";
+                hasloInfo = "Haslo niepoprawna ilość znaków. ";
             }
 
             if (okFlag)
             {
                 var result = uzytkownicyService.Login(dto);
-                if (result == null)
-                    return NoContent();
-                else
-                    return Ok(result);
+                return Ok(result);
             }
             else
             {
                 return BadRequest(loginInfo+" "+hasloInfo);
+            }
+        }
+        
+        [HttpPost]
+        public IActionResult Create([FromBody] UzytkownikAddDTO dto)
+        {
+            var checkData = uzytkownicyService.CheckNewUserData(dto);
+            if (checkData == "ok")
+            {
+                var result = uzytkownicyService.Create(dto);
+                if (result == true)
+                    return Ok(result);
+                else
+                    return BadRequest(result);
+            }
+            else
+            {
+                return BadRequest(checkData);
             }
         }
     }

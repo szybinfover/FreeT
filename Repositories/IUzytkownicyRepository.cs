@@ -9,5 +9,7 @@ namespace Freet.Repositories
         IList<UzytkownikDTO> GetAll();
 
         bool Login(UzytkownikLoginDTO dto);
+
+        bool Create(UzytkownikAddDTO dto);
     }
 }
