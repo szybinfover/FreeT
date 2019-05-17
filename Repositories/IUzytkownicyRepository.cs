@@ -7,5 +7,7 @@ namespace Freet.Repositories
     public interface IUzytkownicyRepository
     {
         IList<UzytkownikDTO> GetAll();
+
+        bool Login(UzytkownikLogin dto);
     }
 }

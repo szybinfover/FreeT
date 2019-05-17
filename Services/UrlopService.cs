@@ -25,7 +25,7 @@ namespace FreeT.Services
 
         public UrlopDTO Get(long Uzytkownik_Id)
         {
-           return urlopyRepository.Get(Uzytkownik_Id); 
+           return urlopyRepository.Get(Uzytkownik_Id);
         }
 
         public IList<UrlopDTO> GetAll()

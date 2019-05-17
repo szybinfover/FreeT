@@ -7,6 +7,6 @@ namespace Freet.Services
     public interface IUzytkownicyService
     {
         IList<UzytkownikDTO> GetAll();
-        //UzytkownikDTO Get(Int64 id);
+        bool Login(UzytkownikLogin dto);
     }
 }
