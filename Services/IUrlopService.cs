@@ -9,6 +9,7 @@ namespace FreeT.Services
     {
        IList<UrlopDTO> GetAll();
        UrlopDTO Get(Int64 Uzytkownik_Id);
+       UrlopDTO GetFromData(Int64 Uzytkownik_Id, DateTime Data);
        bool Create(UrlopAddDTO dto);
        string Delete(Int64 Urlop_Id);
     }

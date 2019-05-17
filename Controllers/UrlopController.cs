@@ -37,6 +37,12 @@ namespace FreeT.Controllers
         return urlopService.Get(Uzytkownik_Id);
     }
 
+    [HttpGet("{Uzytkownik_Id}, {Data}")]
+    public ActionResult<UrlopDTO> GetFromData(Int64 Uzytkownik_Id, DateTime Data)
+    {
+        return urlopService.GetFromData(Uzytkownik_Id, Data);
+    }
+
     [HttpPost]
     public IActionResult Create([FromBody]UrlopAddDTO dto)
     {
@@ -45,8 +51,8 @@ namespace FreeT.Controllers
         if(s_uid > 0)
         {
           var result = urlopService.Create(dto);
-          if (result == null)
-              return BadRequest(result);
+          if (result == false)
+              return BadRequest("Podane daty są nieprawidłowe");
           else
               return NoContent();
         }

@@ -49,7 +49,7 @@ namespace FreeT.Repositories
         using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
         {
 
-            SqlCommand command = new SqlCommand(@"SELECT U.DataOd, U.DataDo, U.Uzytkownik_Id FROM Urlop U WHERE Uzytkownik_Id = @Uzytkownik_Id", connection);
+            SqlCommand command = new SqlCommand(@"SELECT U.Id, U.DataOd, U.DataDo, U.Uzytkownik_Id FROM Urlop U WHERE Uzytkownik_Id = @Uzytkownik_Id", connection);
             command.CommandType = System.Data.CommandType.Text;
             command.Parameters.Add("uzytkownik_id", SqlDbType.BigInt);
             command.Parameters["uzytkownik_id"].Value = Uzytkownik_Id;
@@ -72,28 +72,63 @@ namespace FreeT.Repositories
                 return dto;
             }
 
+        public UrlopDTO GetFromData(long Uzytkownik_Id, DateTime Data)
+        {
+        UrlopDTO dto = new UrlopDTO();
+        using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+        {
+            
+            SqlCommand command = new SqlCommand(@"SELECT U.Id, U.DataOd, U.DataDo, U.Uzytkownik_Id FROM Urlop U WHERE Uzytkownik_Id = @Uzytkownik_Id and @Data between @Data_Od and @Data_Do", connection);
+            command.CommandType = System.Data.CommandType.Text;
+            command.Parameters.Add("uzytkownik_id", SqlDbType.BigInt);
+            command.Parameters["uzytkownik_id"].Value = Uzytkownik_Id;
+            command.Parameters.Add("Data", SqlDbType.DateTime);
+            command.Parameters["Data"].Value = Data;
+            command.Parameters.Add("Data_Od", SqlDbType.DateTime);
+            command.Parameters["Data_Od"].Value = Data;
+            command.Parameters.Add("Data_Do", SqlDbType.DateTime);
+            command.Parameters["Data_Do"].Value = Data;
+            connection.Open();
+            var reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                dto.Id = reader.GetInt64(0);
+                dto.Data_Od = reader.GetDateTime(1);
+                dto.Data_Do = reader.GetDateTime(2);
+                dto.Uzytkownik_Id = reader.GetInt64(3);
+                connection.Close();
+            }
+            else
+            {
+                connection.Close();
+                return null;
+            }
+            }
+                return dto;
+            }
+
         public IList<UrlopDTO> GetAll()
         {
             List<UrlopDTO> list = new List<UrlopDTO>();
-        using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
-        {
-
-            SqlCommand command = new SqlCommand(@"SELECT U.Id, U.DataOd, U.DataDo, U.Uzytkownik_Id FROM Urlop U", connection);
-            command.CommandType = System.Data.CommandType.Text;
-            connection.Open();
-            var reader = command.ExecuteReader();
-            while (reader.Read())
+            using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
-            UrlopDTO dto = new UrlopDTO();
-            dto.Id = reader.GetInt64(0);
-            dto.Data_Od = reader.GetDateTime(1);
-            dto.Data_Do = reader.GetDateTime(2);
-            dto.Uzytkownik_Id = reader.GetInt64(3);
-            list.Add(dto);
+
+                SqlCommand command = new SqlCommand(@"SELECT U.Id, U.DataOd, U.DataDo, U.Uzytkownik_Id FROM Urlop U", connection);
+                command.CommandType = System.Data.CommandType.Text;
+                connection.Open();
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                UrlopDTO dto = new UrlopDTO();
+                dto.Id = reader.GetInt64(0);
+                dto.Data_Od = reader.GetDateTime(1);
+                dto.Data_Do = reader.GetDateTime(2);
+                dto.Uzytkownik_Id = reader.GetInt64(3);
+                list.Add(dto);
+                }
+                connection.Close();
             }
-            connection.Close();
-        }
-        return list;
+            return list;
         }
 
         public bool Delete(Int64 Urlop_Id)
@@ -137,6 +172,18 @@ namespace FreeT.Repositories
                     return false;
                 else
                     return true;
+            }
+        }
+
+        public bool SprawdzIloscDni(DateTime Data_Do, DateTime Data_Od)
+        {
+            if(Data_Od <= Data_Do)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }
