@@ -29,6 +29,20 @@ namespace Freet.Controllers
             return uzytkownicyService.GetAll().ToList();
         }
 
+        [HttpGet("user")]
+        public ActionResult<IList<UzytkownikSelectDTO>> GetUser([FromQuery] string login, [FromQuery] string imie, [FromQuery] string nazwisko, [FromQuery] Int64 zespol_id)
+        {
+            var result = uzytkownicyService.GetUser(login, imie, nazwisko, zespol_id).ToList();
+            if(result != null)
+            {
+                return result;
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
+
         [HttpPost("login")]
         public IActionResult Login([FromBody] UzytkownikLoginDTO dto)
         {
@@ -87,6 +101,12 @@ namespace Freet.Controllers
             {
                 return BadRequest(checkData);
             }
+        }
+
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            // uzytkownicyService.Create(dto);
         }
     }
 }

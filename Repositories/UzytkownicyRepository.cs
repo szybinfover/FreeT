@@ -22,8 +22,7 @@ namespace Freet.Repositories
             List<UzytkownikDTO> list = new List<UzytkownikDTO>();
             using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
-
-                SqlCommand command = new SqlCommand("SELECT ID, LOGIN, IMIE, NAZWISKO FROM Uzytkownik", connection);
+                SqlCommand command = new SqlCommand("SELECT ID, LOGIN, IMIE, NAZWISKO, ZESPOL_ID FROM Uzytkownik", connection);
                 command.CommandType = System.Data.CommandType.Text;
                 connection.Open();
                 var reader = command.ExecuteReader();
@@ -34,10 +33,51 @@ namespace Freet.Repositories
                     dto.Login = reader.GetString(1);
                     dto.Imie = reader.GetString(2);
                     dto.Nazwisko = reader.GetString(3);
+                    dto.ZespolId = reader.GetInt64(4);
                     list.Add(dto);
                 }
                 connection.Close();
             }
+            return list;
+        }
+
+        public IList<UzytkownikSelectDTO> GetUser(string login, string imie, string nazwisko, Int64 zespol_id)
+        {
+            List<UzytkownikSelectDTO> list = new List<UzytkownikSelectDTO>();
+            using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                SqlCommand command = new SqlCommand(@"DECLARE @d_login varchar(50) = @login;
+                    DECLARE @d_imie varchar(50) = @imie;
+                    DECLARE @d_nazwisko varchar(200) = @nazwisko;
+                    DECLARE @d_zespol_id bigint = @zespol_id;
+
+                    SELECT * FROM Uzytkownik WHERE Login = IIF(@d_login is not null, @d_login, Login) 
+                    AND Imie = IIF(@d_imie is not null, @d_imie, Imie) 
+                    AND Nazwisko = IIF(@d_nazwisko is not null, @d_nazwisko, Nazwisko) 
+                    AND Zespol_Id = IIF(@d_zespol_id is not null, @d_zespol_id, Zespol_Id);", connection);
+                command.CommandType = System.Data.CommandType.Text;
+                command.Parameters.Add("login", SqlDbType.VarChar);
+                command.Parameters["login"].Value = login;
+                command.Parameters.Add("imie", SqlDbType.VarChar);
+                command.Parameters["imie"].Value = imie;
+                command.Parameters.Add("nazwisko", SqlDbType.VarChar);
+                command.Parameters["nazwisko"].Value = nazwisko;
+                command.Parameters.Add("zespol_id", SqlDbType.BigInt);
+                command.Parameters["zespol_id"].Value = zespol_id;
+                connection.Open();
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    UzytkownikSelectDTO dtoReturn = new UzytkownikSelectDTO();
+                    dtoReturn.Login = reader.GetString(0);
+                    dtoReturn.Imie = reader.GetString(1);
+                    dtoReturn.Nazwisko = reader.GetString(2);
+                    dtoReturn.ZespolId = reader.GetInt64(3);
+                    list.Add(dtoReturn);
+                }
+                connection.Close();
+            }
+
             return list;
         }
 
@@ -63,6 +103,43 @@ namespace Freet.Repositories
                         if (dto.Login == Login)
                         {
                             Console.WriteLine("User login: "+ Login);
+                            loginFlag = true;
+                        }
+                    }
+                    return loginFlag;
+                }
+                catch
+                {
+                    connection.Close();
+                    return false;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        public bool SprawdzCzyIstnieje (UzytkownikAddDTO dto)
+        {
+            using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                try
+                {
+                    bool loginFlag = false;
+                    SqlCommand command = new SqlCommand("SELECT LOGIN FROM Uzytkownik WHERE login = @login", connection);
+                    command.CommandType = System.Data.CommandType.Text;
+                    command.Parameters.Add("login", SqlDbType.VarChar);
+                    command.Parameters["login"].Value = dto.Login;
+                    connection.Open();
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        string Login = "";
+                        Login = reader.GetString(0);
+                        if (dto.Login == Login)
+                        {
+                            Console.WriteLine("Existing user login: "+ Login);
                             loginFlag = true;
                         }
                     }

@@ -25,6 +25,11 @@ namespace Freet.Services
             return uzytkownicyRepository.GetAll();
         }
 
+        public IList<UzytkownikSelectDTO> GetUser(string login, string imie, string nazwisko, Int64 zespol_id)
+        {
+            return uzytkownicyRepository.GetUser(login, imie, nazwisko, zespol_id);
+        }
+
         static string GetMd5Hash(MD5 md5Hash, string input)
         {
             // Convert the input string to a byte array and compute the hash.
@@ -68,6 +73,7 @@ namespace Freet.Services
             string imieInfo = "";
             string nazwiskoInfo = "";
             string zespolIdkoInfo = "";
+            string isUserExistInfo = "";
 
             if (valLogin.Length > 0 && valLogin.Length <=50)
             {
@@ -119,13 +125,23 @@ namespace Freet.Services
                 zespolIdkoInfo = "Wartosc idZespol nie moze byc pusta lub rowna zero. ";
             }
 
+            if (!uzytkownicyRepository.SprawdzCzyIstnieje(dto))
+            {
+                okFlag = true;
+            }
+            else
+            {
+                isUserExistInfo = "Uzytkownik o takim loginie juz istnieje, podaj inny login. ";
+                okFlag = false;
+            }
+
             if(okFlag)
             {
                 ret = "ok";
             }
             else
             {
-                ret = loginInfo +" "+imieInfo +" "+nazwiskoInfo +" "+hasloInfo +" "+zespolIdkoInfo;
+                ret = loginInfo +" "+imieInfo +" "+nazwiskoInfo +" "+hasloInfo +" "+zespolIdkoInfo +" "+isUserExistInfo;
             }
             return ret;
         }
