@@ -9,5 +9,7 @@ namespace FreeT.Repositories
         IList<UrlopDTO> GetAll();
        UrlopDTO Get(Int64 Uzytkownik_Id);
        bool Create(UrlopAddDTO dto);
+       bool SprawdzCzyIdIstnieje(Int64 Urlop_Id);
+       bool Delete(Int64 Urlop_Id);
     }
 }

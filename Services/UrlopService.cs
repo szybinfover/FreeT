@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using FreeT.DTO;
 using FreeT.Repositories;
+using System;
 
 namespace FreeT.Services
 {
@@ -30,6 +31,23 @@ namespace FreeT.Services
         public IList<UrlopDTO> GetAll()
         {
             return urlopyRepository.GetAll();
+        }
+
+        public string Delete(Int64 Urlop_Id)
+        {
+
+            
+            if (urlopyRepository.SprawdzCzyIdIstnieje(Urlop_Id))
+            {
+                if (urlopyRepository.Delete(Urlop_Id))
+                    return null;
+                else
+                    return "nie udało się usunąć";
+            }
+            else
+            {
+                return "obiekt nie istnieje";
+            }
         }
     }
 }

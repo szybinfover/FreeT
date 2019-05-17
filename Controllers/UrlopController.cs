@@ -17,6 +17,7 @@ namespace FreeT.Controllers
   {
     private IUrlopService urlopService;
 
+
     IConfiguration configuration;
     public UrlopController(IConfiguration configuration, IUrlopService urlopService)
     {
@@ -39,11 +40,31 @@ namespace FreeT.Controllers
     [HttpPost]
     public IActionResult Create([FromBody]UrlopAddDTO dto)
     {
-        var result = urlopService.Create(dto);
-        if (result == null)
-            return BadRequest(result);
+        long s_uid = dto.Uzytkownik_Id;
+
+        if(s_uid > 0)
+        {
+          var result = urlopService.Create(dto);
+          if (result == null)
+              return BadRequest(result);
+          else
+              return NoContent();
+        }
         else
-            return NoContent();
+        {
+            return BadRequest("Id użytkownika musi być większe niż 0");
+        }
+    }
+
+    [HttpDelete("{Urlop_Id}")]
+    public IActionResult Delete(Int64 Urlop_Id)
+    {
+      var result = urlopService.Delete(Urlop_Id);
+
+      if (result == null)
+        return NoContent();
+      else
+        return BadRequest(result);
     }
   }
 }
