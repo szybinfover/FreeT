@@ -17,6 +17,7 @@ namespace FreeT.Controllers
   {
     private IUrlopService urlopService;
 
+
     IConfiguration configuration;
     public UrlopController(IConfiguration configuration, IUrlopService urlopService)
     {
@@ -36,14 +37,40 @@ namespace FreeT.Controllers
         return urlopService.Get(Uzytkownik_Id);
     }
 
+    [HttpGet("{Uzytkownik_Id}, {Data}")]
+    public ActionResult<UrlopDTO> GetFromData(Int64 Uzytkownik_Id, DateTime Data)
+    {
+        return urlopService.GetFromData(Uzytkownik_Id, Data);
+    }
+
     [HttpPost]
     public IActionResult Create([FromBody]UrlopAddDTO dto)
     {
-        var result = urlopService.Create(dto);
-        if (result == null)
-            return BadRequest(result);
+        long s_uid = dto.Uzytkownik_Id;
+
+        if(s_uid > 0)
+        {
+          var result = urlopService.Create(dto);
+          if (result == false)
+              return BadRequest("Podane daty są nieprawidłowe");
+          else
+              return NoContent();
+        }
         else
-            return NoContent();
+        {
+            return BadRequest("Id użytkownika musi być większe niż 0");
+        }
+    }
+
+    [HttpDelete("{Urlop_Id}")]
+    public IActionResult Delete(Int64 Urlop_Id)
+    {
+      var result = urlopService.Delete(Urlop_Id);
+
+      if (result == null)
+        return NoContent();
+      else
+        return BadRequest(result);
     }
   }
 }

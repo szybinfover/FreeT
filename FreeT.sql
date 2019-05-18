@@ -59,6 +59,8 @@ UPDATE Uzytkownik SET adres_email = 'mail@gmail.com' WHERE ID = 1;
 UPDATE Uzytkownik SET adres_email = 'email@example.com' WHERE ID = 2;
 UPDATE Uzytkownik SET adres_email = 'imejl@int.pl' WHERE ID = 3;
 
+ALTER TABLE Urlop ADD liczba_dni INT ;
+
 -- Hash MD5 do hasła:password
 --5F4DCC3B5AA765D61D8327DEB882CF99
 
