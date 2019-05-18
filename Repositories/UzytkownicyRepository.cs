@@ -41,7 +41,7 @@ namespace Freet.Repositories
             return list;
         }
 
-        public IList<UzytkownikSelectDTO> GetUser(string login, string imie, string nazwisko, Int64 zespol_id)
+        public IList<UzytkownikSelectDTO> GetUser(UzytkownikSelectDTO dto)
         {
             List<UzytkownikSelectDTO> list = new List<UzytkownikSelectDTO>();
             using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
@@ -51,19 +51,35 @@ namespace Freet.Repositories
                     DECLARE @d_nazwisko varchar(200) = @nazwisko;
                     DECLARE @d_zespol_id bigint = @zespol_id;
 
-                    SELECT * FROM Uzytkownik WHERE Login = IIF(@d_login is not null, @d_login, Login) 
+                    SELECT login, imie, nazwisko, zespol_id FROM Uzytkownik WHERE Login = IIF(@d_login is not null, @d_login, Login) 
                     AND Imie = IIF(@d_imie is not null, @d_imie, Imie) 
                     AND Nazwisko = IIF(@d_nazwisko is not null, @d_nazwisko, Nazwisko) 
                     AND Zespol_Id = IIF(@d_zespol_id is not null, @d_zespol_id, Zespol_Id);", connection);
                 command.CommandType = System.Data.CommandType.Text;
                 command.Parameters.Add("login", SqlDbType.VarChar);
-                command.Parameters["login"].Value = login;
+                if(string.IsNullOrEmpty(dto.Login))
+                    command.Parameters["login"].Value = DBNull.Value;
+                else
+                    command.Parameters["login"].Value = dto.Login;
+
                 command.Parameters.Add("imie", SqlDbType.VarChar);
-                command.Parameters["imie"].Value = imie;
+                if(string.IsNullOrEmpty(dto.Imie))
+                    command.Parameters["imie"].Value = DBNull.Value;
+                else
+                    command.Parameters["imie"].Value = dto.Imie;
+                    
                 command.Parameters.Add("nazwisko", SqlDbType.VarChar);
-                command.Parameters["nazwisko"].Value = nazwisko;
+                if(string.IsNullOrEmpty(dto.Nazwisko))
+                    command.Parameters["nazwisko"].Value = DBNull.Value;
+                else
+                    command.Parameters["nazwisko"].Value = dto.Nazwisko;
+                    
                 command.Parameters.Add("zespol_id", SqlDbType.BigInt);
-                command.Parameters["zespol_id"].Value = zespol_id;
+                if(dto.ZespolId <= 0)
+                    command.Parameters["zespol_id"].Value = DBNull.Value;
+                else
+                    command.Parameters["zespol_id"].Value = dto.ZespolId;
+                    
                 connection.Open();
                 var reader = command.ExecuteReader();
                 while (reader.Read())

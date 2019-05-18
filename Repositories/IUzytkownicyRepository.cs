@@ -8,7 +8,7 @@ namespace Freet.Repositories
     {
         IList<UzytkownikDTO> GetAll();
         bool SprawdzCzyIstnieje (UzytkownikAddDTO dto);
-        IList<UzytkownikSelectDTO> GetUser(string login, string imie, string nazwisko, Int64 zespol_id);
+        IList<UzytkownikSelectDTO> GetUser(UzytkownikSelectDTO dto);
         bool Login(UzytkownikLoginDTO dto);
 
         bool Create(UzytkownikAddDTO dto);

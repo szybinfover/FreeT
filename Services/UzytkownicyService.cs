@@ -25,9 +25,9 @@ namespace Freet.Services
             return uzytkownicyRepository.GetAll();
         }
 
-        public IList<UzytkownikSelectDTO> GetUser(string login, string imie, string nazwisko, Int64 zespol_id)
+        public IList<UzytkownikSelectDTO> GetUser(UzytkownikSelectDTO dto)
         {
-            return uzytkownicyRepository.GetUser(login, imie, nazwisko, zespol_id);
+            return uzytkownicyRepository.GetUser(dto);
         }
 
         static string GetMd5Hash(MD5 md5Hash, string input)

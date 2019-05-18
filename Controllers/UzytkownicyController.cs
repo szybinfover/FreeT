@@ -32,7 +32,37 @@ namespace Freet.Controllers
         [HttpGet("user")]
         public ActionResult<IList<UzytkownikSelectDTO>> GetUser([FromQuery] string login, [FromQuery] string imie, [FromQuery] string nazwisko, [FromQuery] Int64 zespol_id)
         {
-            var result = uzytkownicyService.GetUser(login, imie, nazwisko, zespol_id).ToList();
+            UzytkownikSelectDTO dto = new UzytkownikSelectDTO();
+            if(string.IsNullOrEmpty(login))
+            {
+                dto.Login = null;
+            }
+            else
+            {
+                dto.Login = login.Trim();
+            }
+            if(string.IsNullOrEmpty(imie))
+            {
+                dto.Imie = null;
+            }
+            else
+            {
+                dto.Imie = imie.Trim();
+            }
+            if(string.IsNullOrEmpty(nazwisko))
+            {
+                dto.Nazwisko = null;
+            }
+            else
+            {
+                dto.Nazwisko = nazwisko.Trim();
+            }
+            if(zespol_id > 0)
+            {
+                dto.ZespolId = zespol_id;
+            }
+
+            var result = uzytkownicyService.GetUser(dto).ToList();
             if(result != null)
             {
                 return result;
