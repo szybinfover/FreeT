@@ -62,10 +62,10 @@ namespace FreeT.Controllers
         }
     }
 
-    [HttpDelete("{Urlop_Id}")]
-    public IActionResult Delete(Int64 Urlop_Id)
+    [HttpDelete("{UrlopId}")]
+    public IActionResult Delete(Int64 UrlopId)
     {
-      var result = urlopService.Delete(Urlop_Id);
+      var result = urlopService.Delete(UrlopId);
 
       if (result == null)
         return NoContent();
